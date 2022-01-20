@@ -8,7 +8,7 @@ def setup():  # setup() runs once
     frameRate(30)
     
     for i in range(100):
-        molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random-5,5)),'velx':1+random(-5,5),'vely':1+random(-5,5), 'color':255,'radius':random(10,20), 'density':random(1,10), 'mass':0}
+        molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(1,10), 'mass':0}
         molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
         molecules.append(molecule)
 
@@ -17,8 +17,8 @@ def draw():
     for molecule in molecules[:]: 
         fill(255,molecule['color'],molecule['color'])
         ellipse(molecule['x'],molecule['y'],molecule['radius'],molecule['radius'])
-        molecule['x']+=molecule['velx']
-        molecule['y']+=molecule['vely']
+        molecule['x']+=molecule['vel'].x
+        molecule['y']+=molecule['vel'].y
         wall_collide(molecule) #Calls wall colliode function
         collision_detection(molecule) #Calls molecule collsion detection
 
@@ -46,6 +46,6 @@ def collision_detection(object):
 def wall_collide(object):   
     #Wall collision
     if object['x'] < 0 or object['x'] > canvas_size['x']:
-        object['velx']*=-1
+        object['vel'].x*=-1
     if object['y'] < 0 or object['y'] > canvas_size['y']:
-        object['vely']*=-1
+        object['vel'].y*=-1
