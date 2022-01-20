@@ -7,9 +7,10 @@ def setup():  # setup() runs once
     size(canvas_size['x'], canvas_size['y'])
     frameRate(30)
     
-    for i in range(100):
+    for i in range(50):
         molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(1,10), 'mass':0}
         molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
+        molecule['color']-=20*molecule['density']
         molecules.append(molecule)
 
 def draw():
@@ -23,8 +24,11 @@ def draw():
         collision_detection(molecule) #Calls molecule collsion detection
 
 def collision_physics(object1, object2): #Elastic (No energy lossed) collision
-    
-    pass
+    initial_vel1 = object1['vel']
+    initial_vel2 = object2['vel']
+    object2['vel']= ((2*object1['mass'])/(object1['mass']+object2['mass']) * initial_vel1) - (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel2)
+    object1['vel']= (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel1) +((2*object2['mass'])/(object1['mass']+object2['mass']) * initial_vel2)
+    #pass
     #m_{1} v_{1 i}+m_{2} v_{2 i}=m_{1} v_{1 f}+m_{2} v_{2 f}
     
 
@@ -41,7 +45,6 @@ def collision_detection(object):
                 if object in molecules: #Prevents crashing due to error
                     #molecules.remove(molecule)
                     collision_physics(molecule,object)
-                    object['color']-=50
 
 def wall_collide(object):   
     #Wall collision
