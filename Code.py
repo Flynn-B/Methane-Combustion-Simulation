@@ -7,8 +7,8 @@ def setup():  # setup() runs once
     size(canvas_size['x'], canvas_size['y'])
     frameRate(30)
     
-    for i in range(50):
-        molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(1,10), 'mass':0}
+    for i in range(115):
+        molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
         molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
         molecule['color']-=20*molecule['density']
         molecules.append(molecule)
@@ -35,13 +35,10 @@ def collision_physics(object1, object2): #Elastic (No energy lossed) collision
 def collision_detection(object):
     for molecule in molecules[:]:
         if molecule != object:
-            x1=object['x'] #X cord of object1
-            y1=object['y'] #Y cord of object1
-            r1=object['radius'] #radius of object1
-            x2=molecule['x'] #x cord of object2
-            y2=molecule['y']#y cord of object2
-            r2=molecule['radius'] #radius of object2
-            if pow((x2-x1),2) + pow((y2-y1),2) <= pow((r1+r2),2):
+            dx = (object['x'] + object['radius']) - (molecule['x'] + molecule['radius']);
+            dy = (object['y'] + object['radius']) - (molecule['y'] + molecule['radius']);
+            distance = sqrt(dx * dx + dy * dy);
+            if (distance < object['radius'] + molecule['radius']):
                 if object in molecules: #Prevents crashing due to error
                     #molecules.remove(molecule)
                     collision_physics(molecule,object)
