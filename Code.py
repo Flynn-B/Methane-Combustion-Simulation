@@ -37,7 +37,7 @@ def draw():
 def collision_physics(object1, object2): #Elastic (No energy lossed) collision
     initial_vel1 = object1['vel']
     initial_vel2 = object2['vel']
-object2['vel']= ((2*object1['mass'])/(object1['mass']+object2['mass']) * initial_vel1) - (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel2)
+    object2['vel']= ((2*object1['mass'])/(object1['mass']+object2['mass']) * initial_vel1) - (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel2)
     object1['vel']= (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel1) +((2*object2['mass'])/(object1['mass']+object2['mass']) * initial_vel2)
     #pass
     #m_{1} v_{1 i}+m_{2} v_{2 i}=m_{1} v_{1 f}+m_{2} v_{2 f}
@@ -52,7 +52,11 @@ def collision_detection(object):
             if (distance < object['radius'] + molecule['radius']):
                 if object in molecules: #Prevents crashing due to error
                     #molecules.remove(molecule)
+                    #Collision physics and velocity calculations
                     collision_physics(molecule,object)
+                    #Prevent overlapping of atoms
+                    object['x']+=(object['x']-molecule['x'])/10 #Divide by 10 to prevent jumpy collisions
+                    object['y']+=(object['y']-molecule['y'])/10 #Divide by 10 to prevent jumpy collisions
 
 def wall_collide(object):   
     #Wall collision
