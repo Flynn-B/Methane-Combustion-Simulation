@@ -1,7 +1,7 @@
 molecules = []
 canvas_size = {'x':1000,'y':600}
 
-debug = True #True for debug mode 
+debug = False #True for debug mode 
 
 #Space Partioning collsion needs to be added
 
@@ -37,7 +37,7 @@ def draw():
 def collision_physics(object1, object2): #Elastic (No energy lossed) collision
     initial_vel1 = object1['vel']
     initial_vel2 = object2['vel']
-    object2['vel']= ((2*object1['mass'])/(object1['mass']+object2['mass']) * initial_vel1) - (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel2)
+object2['vel']= ((2*object1['mass'])/(object1['mass']+object2['mass']) * initial_vel1) - (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel2)
     object1['vel']= (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel1) +((2*object2['mass'])/(object1['mass']+object2['mass']) * initial_vel2)
     #pass
     #m_{1} v_{1 i}+m_{2} v_{2 i}=m_{1} v_{1 f}+m_{2} v_{2 f}
