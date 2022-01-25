@@ -1,17 +1,28 @@
 molecules = []
 canvas_size = {'x':1000,'y':600}
 
+debug = True #True for debug mode 
+
 #Space Partioning collsion needs to be added
 
 def setup():  # setup() runs once
     size(canvas_size['x'], canvas_size['y'])
     frameRate(30)
     
-    for i in range(115):
-        molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
+    if debug == False:
+        for i in range(115):
+            molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
+            molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
+            molecule['color']-=20*molecule['density']
+            molecules.append(molecule)
+    elif debug == True:
+        molecule = {'x':0,'y':canvas_size['y']/2,'vel':PVector(5,0),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
         molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
-        molecule['color']-=20*molecule['density']
         molecules.append(molecule)
+        molecule = {'x':canvas_size['x'],'y':canvas_size['y']/2,'vel':PVector(-5,0),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
+        molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
+        molecules.append(molecule)
+        
 
 def draw():
     background(204)
