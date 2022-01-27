@@ -1,6 +1,15 @@
 molecules = [] #List that holds all the dictionaries of molecules of data
 canvas_size = {'x':1000,'y':600}
 
+scaling_factor = 1/15
+density_scaling_factor = 10
+
+#Molecule Radius, Density, and Mass based on real word nubmers
+methane = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':190*scaling_factor, 'density':0.657*density_scaling_factor, 'mass':0} #Assigns dictionary 'methane' values
+oxygen = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':173*scaling_factor, 'density':1.429*density_scaling_factor, 'mass':0} #Assigns dictionary 'oxygen' values
+carbon_dioxide = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':330*scaling_factor, 'density':1.977*density_scaling_factor, 'mass':0} #Assigns dictionary 'carbon_dioxide' values
+water = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':265*scaling_factor, 'density':997*density_scaling_factor, 'mass':0} #Assigns dictionary 'water' values
+
 debug = False #True for debug mode 
 
 #Space Partioning collsion needs to be added
@@ -39,7 +48,6 @@ def collision_physics(object1, object2): #Elastic (No energy lossed) collision
     initial_vel2 = object2['vel']#Records initial velocity of object 2 for physics calculations
     object2['vel']= ((2*object1['mass'])/(object1['mass']+object2['mass']) * initial_vel1) - (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel2) #Calcs object2 velocity based on collision and mass
     object1['vel']= (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel1) +((2*object2['mass'])/(object1['mass']+object2['mass']) * initial_vel2)#Calcs object1 velocity based on collision and mass
-    
 
 def collision_detection(object):
     for molecule in molecules[:]:
@@ -49,7 +57,6 @@ def collision_detection(object):
             distance = sqrt(dx * dx + dy * dy);
             if (distance < object['radius'] + molecule['radius']):
                 if object in molecules: #Prevents crashing due to error
-                    #molecules.remove(molecule)
                     #Collision physics and velocity calculations
                     collision_physics(molecule,object)
                     #Prevent overlapping of atoms
