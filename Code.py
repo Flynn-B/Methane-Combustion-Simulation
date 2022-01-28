@@ -11,22 +11,41 @@ debug = False #True for debug mode
 
 def setup():  # setup() runs once
     
-    scaling_factor = 1.0/15
-    density_scaling_factor = 10
+    scaling_factor = 1
+    density_scaling_factor = 4.0
     
     #Molecule Radius, Density, and Mass based on real word nubmers
-    methane = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':190*scaling_factor, 'density':0.657*density_scaling_factor, 'mass':0, 'reacts_with':'oxygen'} #Assigns dictionary 'methane' values
-    oxygen = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':173*scaling_factor, 'density':1.429*density_scaling_factor, 'mass':0, 'reacts_with':'methane'} #Assigns dictionary 'oxygen' values
+    methane = {
+        'x':0,
+        'y':0,
+        'vel':PVector(random(-5,5),random(-5,5)),
+        'color':255,
+        'radius':24.4*scaling_factor, 
+        'density':0.657*density_scaling_factor, 
+        'mass':16, 
+        'reacts_with':'oxygen'} #Assigns dictionary 'methane' values
     
+    #Assigns dictionary 'oxygen' values
+    oxygen = {
+        'x':0,
+        'y':0,
+        'vel':PVector(random(-5,5),random(-5,5)),
+        'color':255,
+        'radius':22.39*scaling_factor, 
+        'density':1.429*density_scaling_factor, 
+        'mass':32, 
+        'reacts_with':'methane'} 
+# molecule = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':173*scaling_factor, 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
+
     #Assigns dictionary 'carbon_dioxide' values
     carbon_dioxide = {
         'x':0,
         'y':0,
         'vel':PVector(random(-5,5),random(-5,5)),
         'color':255,
-        'radius':330*scaling_factor, 
-        'density':1.977*density_scaling_factor,
-        'mass':0,
+        'radius':22.26*scaling_factor, 
+        'density':1.977,
+        'mass':44,
         'reacts_with':'nothing'} 
     
     #Assigns dictionary 'water' values
@@ -35,9 +54,10 @@ def setup():  # setup() runs once
         'y':0,
         'vel':PVector(random(-5,5),random(-5,5)),
         'color':255,
-        'radius':265*scaling_factor, 
-        'density':997*density_scaling_factor, 
-        'mass':0, 'reacts_with':'nothing'
+        'radius':22.39*scaling_factor, 
+        'density':0.804*density_scaling_factor, 
+        'mass':18, 
+        'reacts_with':'nothing'
     } 
   
     size(canvas_size['x'], canvas_size['y']) #Sets canvas size based on predetermined value
@@ -45,12 +65,16 @@ def setup():  # setup() runs once
     
     if debug == False: #Runs code as normal if debug is False
         for i in range(115):
-           # molecule = methane
+            #molecule = methane
             #molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
             #molecule = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':173*scaling_factor, 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
-            molecule=carbon_dioxide
+            molecule=dict(oxygen)
+            #Sets molecule x and y cord
             molecule['x']=random(0,canvas_size['x'])
             molecule['y']=random(0,canvas_size['y'])
+            #Sets molecule Velocity
+            molecule['vel']=PVector(random(-5,5),random(-5,5))
+            #Recalculates mass to fit size
             molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density'] #Calculates 'mass' based on 'density' and 'size'
             molecule['color']-=20*molecule['density']
             molecules.append(molecule) #Adds the dictionary of the 'molecule' to the list of 'molecules'
