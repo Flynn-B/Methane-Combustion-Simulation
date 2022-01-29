@@ -37,7 +37,7 @@ carbon_dioxide = {
     'x':0,
     'y':0,
     'vel':PVector(random(-5,5),random(-5,5)),
-    'color':color(204, 102, 47),
+    'color':color(237, 173, 45),
     'radius':22.26*scaling_factor, 
     'density':1.977*density_scaling_factor,
     'mass':44,
@@ -67,11 +67,11 @@ def setup():  # setup() runs once
     frameRate(30) #Sets framrate
     
     if debug == False: #Runs code as normal if debug is False
-        for i in range(50):
+        for i in range(10):
             #molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
             #molecule = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':173*scaling_factor, 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
-            create_molecule(oxygen)
-            create_molecule(methane)
+            create_molecule(oxygen,None)
+            create_molecule(methane,None)
     elif debug == True: #Debug mode for code, creates head on collision between two circles
         molecule = {'x':0,'y':canvas_size['y']/2,'vel':PVector(5,0),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
         molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
@@ -92,12 +92,16 @@ def draw(): #Function Draws Molecules to Canvas
         wall_collide(molecule) #Calls wall colliode function
         collision_detection(molecule) #Calls molecule collsion detection
 
-def create_molecule(type):
+def create_molecule(type, pos):
     #Creates a copy of the dictionary referenced by type
     molecule=dict(type)
     #Sets molecule x and y cord
-    molecule['x']=random(0,canvas_size['x'])
-    molecule['y']=random(0,canvas_size['y'])
+    if pos is None:
+        molecule['x']=random(0,canvas_size['x'])
+        molecule['y']=random(0,canvas_size['y'])
+    elif pos is not None:
+        molecule['x']=pos.x
+        molecule['y']=pos.y
     #Sets molecule Velocity
     molecule['vel']=PVector(random(-5,5),random(-5,5))
     #Recalculates mass to fit size
@@ -131,9 +135,8 @@ def collision_detection(object):
                             if 'oxygen' in {object['reacts_with'], molecule['reacts_with']}:
                                 molecules.remove(object)
                                 molecules.remove(molecule)
-                                create_molecule(water)
-                                create_molecule(carbon_dioxide)
-                                
+                                create_molecule(water, PVector(object['x'],object['y'])) #Creates molecule from reaction in same pos
+                                create_molecule(carbon_dioxide, PVector(object['x'],object['y'])) #Creates molecule from reaction in same pos
                             else:
                                 #Collision physics and velocity calculations
                                 collision_physics(molecule,object)
