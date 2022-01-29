@@ -3,81 +3,75 @@ canvas_size = {'x':1000,'y':600}
 
 
 
+scaling_factor = 1
+density_scaling_factor = 4.0
 
+#Molecule Radius, Density, and Mass based on real word nubmers
+
+#Assigns dictionary 'methane' values
+methane = {
+    'x':0,
+    'y':0,
+    'vel':PVector(random(-5,5),random(-5,5)),
+    'color':color(52, 237, 86),
+    'radius':24.4*scaling_factor, 
+    'density':0.657*density_scaling_factor, 
+    'mass':16, 
+    'reacts_with':'oxygen'
+} 
+
+#Assigns dictionary 'oxygen' values
+oxygen = {
+    'x':0,
+    'y':0,
+    'vel':PVector(random(-5,5),random(-5,5)),
+    'color':color(234, 237, 52),
+    'radius':22.39*scaling_factor, 
+    'density':1.429*density_scaling_factor, 
+    'mass':32, 
+    'reacts_with':'methane'
+} 
+
+#Assigns dictionary 'carbon_dioxide' values
+carbon_dioxide = {
+    'x':0,
+    'y':0,
+    'vel':PVector(random(-5,5),random(-5,5)),
+    'color':color(204, 102, 47),
+    'radius':22.26*scaling_factor, 
+    'density':1.977*density_scaling_factor,
+    'mass':44,
+    'reacts_with':'nothing'
+} 
+
+#Assigns dictionary 'water' values
+water = {
+    'x':0,
+    'y':0,
+    'vel':PVector(random(-5,5),random(-5,5)),
+    'color':color(53, 64, 219),
+    'radius':22.39*scaling_factor, 
+    'density':0.804*density_scaling_factor, 
+    'mass':18, 
+    'reacts_with':'nothing'
+} 
+  
 
 debug = False #True for debug mode 
 
 #Space Partioning collsion needs to be added
 
 def setup():  # setup() runs once
-    
-    scaling_factor = 1
-    density_scaling_factor = 4.0
-    
-    #Molecule Radius, Density, and Mass based on real word nubmers
-    methane = {
-        'x':0,
-        'y':0,
-        'vel':PVector(random(-5,5),random(-5,5)),
-        'color':255,
-        'radius':24.4*scaling_factor, 
-        'density':0.657*density_scaling_factor, 
-        'mass':16, 
-        'reacts_with':'oxygen'} #Assigns dictionary 'methane' values
-    
-    #Assigns dictionary 'oxygen' values
-    oxygen = {
-        'x':0,
-        'y':0,
-        'vel':PVector(random(-5,5),random(-5,5)),
-        'color':255,
-        'radius':22.39*scaling_factor, 
-        'density':1.429*density_scaling_factor, 
-        'mass':32, 
-        'reacts_with':'methane'} 
-# molecule = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':173*scaling_factor, 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
 
-    #Assigns dictionary 'carbon_dioxide' values
-    carbon_dioxide = {
-        'x':0,
-        'y':0,
-        'vel':PVector(random(-5,5),random(-5,5)),
-        'color':255,
-        'radius':22.26*scaling_factor, 
-        'density':1.977,
-        'mass':44,
-        'reacts_with':'nothing'} 
-    
-    #Assigns dictionary 'water' values
-    water = {
-        'x':0,
-        'y':0,
-        'vel':PVector(random(-5,5),random(-5,5)),
-        'color':255,
-        'radius':22.39*scaling_factor, 
-        'density':0.804*density_scaling_factor, 
-        'mass':18, 
-        'reacts_with':'nothing'
-    } 
-  
     size(canvas_size['x'], canvas_size['y']) #Sets canvas size based on predetermined value
     frameRate(30) #Sets framrate
     
     if debug == False: #Runs code as normal if debug is False
-        for i in range(115):
-            #molecule = methane
+        for i in range(50):
             #molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
             #molecule = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':173*scaling_factor, 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
-            molecule=dict(oxygen)
-            #Sets molecule x and y cord
-            molecule['x']=random(0,canvas_size['x'])
-            molecule['y']=random(0,canvas_size['y'])
-            #Sets molecule Velocity
-            molecule['vel']=PVector(random(-5,5),random(-5,5))
-            #Recalculates mass to fit size
-            molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density'] #Calculates 'mass' based on 'density' and 'size'
-            molecule['color']-=20*molecule['density']
-            molecules.append(molecule) #Adds the dictionary of the 'molecule' to the list of 'molecules'
+            create_molecule(oxygen)
+            create_molecule(methane)
     elif debug == True: #Debug mode for code, creates head on collision between two circles
         molecule = {'x':0,'y':canvas_size['y']/2,'vel':PVector(5,0),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
         molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
@@ -90,18 +84,36 @@ def setup():  # setup() runs once
 def draw(): #Function Draws Molecules to Canvas
     background(204)
     for molecule in molecules[:]: 
-        fill(255,molecule['color'],molecule['color']) #Colors Molecules based on assigned 'color' value
+        #fill(255,molecule['color'],molecule['color']) #Colors Molecules based on assigned 'color' value
+        fill(molecule['color'])
         ellipse(molecule['x'],molecule['y'],molecule['radius'],molecule['radius']) #Draws Ellipses 
         molecule['x']+=molecule['vel'].x #Moves Molecule's x cordinate based on vel.x
         molecule['y']+=molecule['vel'].y #Moves Molecule's y cordinate based on vel.y
         wall_collide(molecule) #Calls wall colliode function
         collision_detection(molecule) #Calls molecule collsion detection
 
+def create_molecule(type):
+    #Creates a copy of the dictionary referenced by type
+    molecule=dict(type)
+    #Sets molecule x and y cord
+    molecule['x']=random(0,canvas_size['x'])
+    molecule['y']=random(0,canvas_size['y'])
+    #Sets molecule Velocity
+    molecule['vel']=PVector(random(-5,5),random(-5,5))
+    #Recalculates mass to fit size
+    molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density'] #Calculates 'mass' based on 'density' and 'size'
+    #molecule['color']-=20*molecule['density']
+    molecules.append(molecule) #Adds the dictionary of the 'molecule' to the list of 'molecules'
+
 def collision_physics(object1, object2): #Elastic (No energy lossed) collision
     initial_vel1 = object1['vel'] #Records initial velocity of object 1 for physics calculations
     initial_vel2 = object2['vel']#Records initial velocity of object 2 for physics calculations
     object2['vel']= ((2*object1['mass'])/(object1['mass']+object2['mass']) * initial_vel1) - (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel2) #Calcs object2 velocity based on collision and mass
     object1['vel']= (((object1['mass']-object2['mass'])/(object1['mass']+object2['mass']))*initial_vel1) +((2*object2['mass'])/(object1['mass']+object2['mass']) * initial_vel2)#Calcs object1 velocity based on collision and mass
+    #Prevent overlapping of atoms
+    object1['x']+=(object1['x']-object2['x'])/10 #Divide by 10 to prevent jumpy collisions
+    object1['y']+=(object1['y']-object2['y'])/10 #Divide by 10 to prevent jumpy collisions
+    
     
 def collision_detection(object):
     for molecule in molecules[:]:
@@ -111,11 +123,23 @@ def collision_detection(object):
             distance = sqrt(dx * dx + dy * dy);
             if (distance < object['radius'] + molecule['radius']):
                 if object in molecules: #Prevents crashing due to error
-                    #Collision physics and velocity calculations
-                    collision_physics(molecule,object)
-                    #Prevent overlapping of atoms
-                    object['x']+=(object['x']-molecule['x'])/10 #Divide by 10 to prevent jumpy collisions
-                    object['y']+=(object['y']-molecule['y'])/10 #Divide by 10 to prevent jumpy collisions
+                    if 'nothing' in {object['reacts_with'], molecule['reacts_with']}:
+                        #Collision physics and velocity calculations
+                        collision_physics(molecule,object)
+                    else:
+                        if 'methane' in {object['reacts_with'], molecule['reacts_with']}:
+                            if 'oxygen' in {object['reacts_with'], molecule['reacts_with']}:
+                                molecules.remove(object)
+                                molecules.remove(molecule)
+                                create_molecule(water)
+                                create_molecule(carbon_dioxide)
+                                
+                            else:
+                                #Collision physics and velocity calculations
+                                collision_physics(molecule,object)
+                        else:
+                            #Collision physics and velocity calculations
+                            collision_physics(molecule,object)
 
 def wall_collide(object):   
     #Wall collision
