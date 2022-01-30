@@ -67,16 +67,21 @@ def setup():  # setup() runs once
     frameRate(30) #Sets framrate
     
     if debug == False: #Runs code as normal if debug is False
-        for i in range(10):
+        for i in range(50):
             #molecule = {'x':random(0,canvas_size['x']),'y':random(0,canvas_size['y']),'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
             #molecule = {'x':0,'y':0,'vel':PVector(random(-5,5),random(-5,5)),'color':255,'radius':173*scaling_factor, 'density':random(4,6), 'mass':0} #Assigns dictionary 'molecule' values
             create_molecule(oxygen,None)
             create_molecule(methane,None)
     elif debug == True: #Debug mode for code, creates head on collision between two circles
-        molecule = {'x':0,'y':canvas_size['y']/2,'vel':PVector(5,0),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
+        molecule = dict(methane)
+        molecule['vel']=PVector(5,0)
         molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
+        molecule['y']=canvas_size['y']/2
         molecules.append(molecule)
-        molecule = {'x':canvas_size['x'],'y':canvas_size['y']/2,'vel':PVector(-5,0),'color':255,'radius':random(10,20), 'density':random(4,6), 'mass':0}
+        molecule = dict(oxygen)
+        molecule['y']=canvas_size['y']/2
+        molecule['x']=canvas_size['x']
+        molecule['vel']=PVector(-5,0)
         molecule['mass'] = pow((molecule['radius'] * 4/3 * PI),3) * molecule['density']
         molecules.append(molecule)
         
