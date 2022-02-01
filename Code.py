@@ -62,7 +62,11 @@ debug = False #True for debug mode
 #Space Partioning collsion needs to be added
 
 def setup():  # setup() runs once
-
+    """
+    Example DocString: Function Name
+    
+    Function description.
+    """
     size(canvas_size['x'], canvas_size['y']) #Sets canvas size based on predetermined value
     frameRate(30) #Sets framrate
     
