@@ -16,4 +16,4 @@ As expected in the equation, when CH4 and 2O2 collide it results in the producti
 However when any other molecules collide, they do not react and collide according the collision engine which takes into consideration the mass and size of an molecule.
 
 ## Results
-Team won the 2021 New Mexico Governor's Stem Challange, sponsered by Los Alamos National Lab.
+Team won the 2021 New Mexico Governor's Stem Challange, sponsored by Los Alamos National Lab.
